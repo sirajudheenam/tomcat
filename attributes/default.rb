@@ -130,7 +130,7 @@ when 'suse'
   default['tomcat']['packages'] = ['tomcat']
   default['tomcat']['deploy_manager_packages'] = ['tomcat-admin-webapps']
 when 'windows' # from lit-tomcat SAP cookbook
-    default['tomcat']['source-path'] = "http://archive.apache.org/dist/tomcat/tomcat-" + node['tomcat']['install-version'][0]} + "/v" + node['tomcat']['install-version'] + "/bin/"
+    default['tomcat']['source-path'] = "http://archive.apache.org/dist/tomcat/tomcat-" + node['tomcat']['install-version'][0] + "/v" + node['tomcat']['install-version'] + "/bin/"
     default['tomcat']['source-file'] = "apache-tomcat-" + node['tomcat']['install-version'] + ".exe"
     default['tomcat']['install-version'] = '7.0.62'
     default['tomcat']['install-dir'] = 'C:\Program Files\Apache Software Foundation\Tomcat' + node['tomcat']['install-version'][0]
