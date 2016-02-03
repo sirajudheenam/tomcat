@@ -30,3 +30,5 @@ template "#{node['tomcat']['config_dir']}/tomcat-users.xml" do
   )
   notifies :restart, "service[#{node['tomcat']['base_instance']}]"
 end
+
+# case node['platform_family']

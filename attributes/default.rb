@@ -16,11 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-default['tomcat']['base_version'] = 6
+default['tomcat']['base_version'] = 7
 default['tomcat']['base_instance'] = "tomcat#{node['tomcat']['base_version']}"
 default['tomcat']['port'] = 8080
-default['tomcat']['proxy_port'] = nil
-default['tomcat']['proxy_name'] = nil
+default['tomcat']['proxy_port'] = 8080
+default['tomcat']['proxy_name'] = 'http://proxy.wdf.sap.corp'
 default['tomcat']['secure'] = nil
 default['tomcat']['scheme'] = nil
 default['tomcat']['ssl_port'] = 8443
@@ -129,6 +129,14 @@ when 'suse'
   default['tomcat']['endorsed_dir'] = "#{node['tomcat']['lib_dir']}/endorsed"
   default['tomcat']['packages'] = ['tomcat']
   default['tomcat']['deploy_manager_packages'] = ['tomcat-admin-webapps']
+when 'windows' # from lit-tomcat SAP cookbook
+    default['tomcat']['source-path'] = "http://archive.apache.org/dist/tomcat/tomcat-" + node['tomcat']['install-version'][0]} + "/v" + node['tomcat']['install-version'] + "/bin/"
+    default['tomcat']['source-file'] = "apache-tomcat-" + node['tomcat']['install-version'] + ".exe"
+    default['tomcat']['install-version'] = '7.0.62'
+    default['tomcat']['install-dir'] = 'C:\Program Files\Apache Software Foundation\Tomcat' + node['tomcat']['install-version'][0]
+    default['tomcat']['run-as-service'] = true
+    set['java']['set_etc_environment'] = true
+    
 else
   default['tomcat']['user'] = "tomcat#{node['tomcat']['base_version']}"
   default['tomcat']['group'] = "tomcat#{node['tomcat']['base_version']}"
