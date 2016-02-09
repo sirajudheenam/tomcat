@@ -27,6 +27,8 @@ if node['tomcat']['base_version'].to_i == 7
   end
 end
 
+if node['platform_family'] != 'windows' # If node
+  
 package node['tomcat']['packages']
 
 package node['tomcat']['deploy_manager_packages']
@@ -51,6 +53,8 @@ unless node['tomcat']['deploy_manager_apps']
     action :delete
   end
 end
+
+end # If node
 
 # Added a step to deploy the sample war
 cookbook_file "#{node['tomcat']['webapp_dir']}/sample.war" do
