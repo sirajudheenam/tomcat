@@ -53,36 +53,36 @@ unless node['tomcat']['deploy_manager_apps']
 end
 
 # Added a step to deploy the sample war
-cookbook_file "#{node['tomcat']['webapp_dir']}/sample.war" do
-        source 'sample.war'
+remote_file "#{node['tomcat']['webapp_dir']}/sample.war" do
+        source 'https://tomcat.apache.org/tomcat-6.0-doc/appdev/sample/sample.war'
         owner "#{node['tomcat']['user']}"
         group "#{node['tomcat']['group']}"
         mode '0755'
         action :create_if_missing
 end
 # File: http://nexus.wdf.sap.corp:8081/nexus/content/repositories/deploy.releases/com/sap/ushell/ushell/1.36.0/ushell-1.36.0-opt.war
-cookbook_file "#{node['tomcat']['webapp_dir']}/ushell-opt.war" do
-        source 'ushell-1.36.0-opt.war'
-        owner "#{node['tomcat']['user']}"
-        group "#{node['tomcat']['group']}"
-        mode '0755'
-        action :create_if_missing
-end
-# File: http://nexus.wdf.sap.corp:8081/nexus/content/repositories/deploy.releases/com/sap/ui2/srvc/services/1.36.0/services-1.36.0.war
-cookbook_file "#{node['tomcat']['webapp_dir']}/services.war" do
-        source 'services-1.36.0.war'
-        owner "#{node['tomcat']['user']}"
-        group "#{node['tomcat']['group']}"
-        mode '0755'
-        action :create_if_missing
-end
-cookbook_file "#{node['tomcat']['webapp_dir']}/proxy.war" do
-        source 'proxy-1.36.0.war'
-        owner "#{node['tomcat']['user']}"
-        group "#{node['tomcat']['group']}"
-        mode '0755'
-        action :create_if_missing
-end
+# cookbook_file "#{node['tomcat']['webapp_dir']}/ushell-opt.war" do
+#         source 'ushell-1.36.0-opt.war'
+#         owner "#{node['tomcat']['user']}"
+#         group "#{node['tomcat']['group']}"
+#         mode '0755'
+#         action :create_if_missing
+# end
+# # File: http://nexus.wdf.sap.corp:8081/nexus/content/repositories/deploy.releases/com/sap/ui2/srvc/services/1.36.0/services-1.36.0.war
+# cookbook_file "#{node['tomcat']['webapp_dir']}/services.war" do
+#         source 'services-1.36.0.war'
+#         owner "#{node['tomcat']['user']}"
+#         group "#{node['tomcat']['group']}"
+#         mode '0755'
+#         action :create_if_missing
+# end
+# cookbook_file "#{node['tomcat']['webapp_dir']}/proxy.war" do
+#         source 'proxy-1.36.0.war'
+#         owner "#{node['tomcat']['user']}"
+#         group "#{node['tomcat']['group']}"
+#         mode '0755'
+#         action :create_if_missing
+# end
 
 node.set_unless['tomcat']['keystore_password'] = secure_password
 node.set_unless['tomcat']['truststore_password'] = secure_password
@@ -104,31 +104,31 @@ def create_service(instance)
       # SmartOS doesn't support multiple instances
       service_name 'tomcat'
       supports restart: false, reload: false, status: true
-    when 'windows'
-          url = node['tomcat']['source-path'] + node['tomcat']['source-file']
-          remote_file "#{Chef::Config[:file_cache_path]}/#{node['tomcat']['source-file']}" do
-        	  source url
-        	  action :create
-          end
-          include_recipe "sap-java"
-          batch "Windows Tomcat installation" do
-            cwd "#{Chef::Config[:file_cache_path]}"
-            code <<-EOH
-            #{node['tomcat']['source-file']} /S /D=#{node['tomcat']['install-dir']}
-            EOH
-            action :run
-          end
-          if node['tomcat']['run-as-service']
-          	#Enabling and starting Tomcat Service
-          	service "Tomcat#{node['tomcat']['install-version'][0]}" do
-            	supports :restart => true, :reload => true
-            	action [:start, :enable]
-          	end
-          end
-          #Cleanup code
-          file "#{Chef::Config[:file_cache_path]}/#{node['tomcat']['source-file']}" do
-            action :delete
-          end
+    # when 'windows'
+    #       url = node['tomcat']['source-path'] + node['tomcat']['source-file']
+    #       remote_file "#{Chef::Config[:file_cache_path]}/#{node['tomcat']['source-file']}" do
+    #     	  source url
+    #     	  action :create
+    #       end
+    #       include_recipe "sap-java"
+    #       batch "Windows Tomcat installation" do
+    #         cwd "#{Chef::Config[:file_cache_path]}"
+    #         code <<-EOH
+    #         #{node['tomcat']['source-file']} /S /D=#{node['tomcat']['install-dir']}
+    #         EOH
+    #         action :run
+    #       end
+    #       if node['tomcat']['run-as-service']
+    #       	#Enabling and starting Tomcat Service
+    #       	service "Tomcat#{node['tomcat']['install-version'][0]}" do
+    #         	supports :restart => true, :reload => true
+    #         	action [:start, :enable]
+    #       	end
+    #       end
+    #       #Cleanup code
+    #       file "#{Chef::Config[:file_cache_path]}/#{node['tomcat']['source-file']}" do
+    #         action :delete
+    #       end
     else
       service_name instance
     end

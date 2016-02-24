@@ -57,10 +57,11 @@ default['tomcat']['client_auth'] = 'false'
 default['tomcat']['instances'] = {}
 default['tomcat']['run_base_instance'] = true
 default['tomcat']['environment'] = []
-default['tomcat']['packages'] = ["tomcat#{node['tomcat']['base_version']}"]
-default['tomcat']['deploy_manager_packages'] = ["tomcat#{node['tomcat']['base_version']}-admin"]
+default['tomcat']['packages'] = "tomcat7"#["tomcat#{node['tomcat']['base_version']}"]
+default['tomcat']['deploy_manager_packages'] = "tomcat7-admin" #["tomcat#{node['tomcat']['base_version']}-admin"]
 default['tomcat']['ajp_packetsize'] = '8192'
 default['tomcat']['uriencoding'] = 'UTF-8'
+default['tomcat']['deploy_manager_apps'] = true
 case node['platform_family']
 
 when 'rhel', 'fedora'
@@ -129,13 +130,13 @@ when 'suse'
   default['tomcat']['endorsed_dir'] = "#{node['tomcat']['lib_dir']}/endorsed"
   default['tomcat']['packages'] = ['tomcat']
   default['tomcat']['deploy_manager_packages'] = ['tomcat-admin-webapps']
-when 'windows' # from lit-tomcat SAP cookbook
-    default['tomcat']['source-path'] = "http://archive.apache.org/dist/tomcat/tomcat-" + node['tomcat']['install-version'][0] + "/v" + node['tomcat']['install-version'] + "/bin/"
-    default['tomcat']['source-file'] = "apache-tomcat-" + node['tomcat']['install-version'] + ".exe"
-    default['tomcat']['install-version'] = '7.0.62'
-    default['tomcat']['install-dir'] = 'C:\Program Files\Apache Software Foundation\Tomcat' + node['tomcat']['install-version'][0]
-    default['tomcat']['run-as-service'] = true
-    set['java']['set_etc_environment'] = true
+# when 'windows' # from lit-tomcat SAP cookbook
+    # default['tomcat']['source-path'] = "http://archive.apache.org/dist/tomcat/tomcat-" + node['tomcat']['install-version'][0] + "/v" + node['tomcat']['install-version'] + "/bin/"
+    # default['tomcat']['source-file'] = "apache-tomcat-" + node['tomcat']['install-version'] + ".exe"
+    # default['tomcat']['install-version'] = '7.0.62'
+    # default['tomcat']['install-dir'] = 'C:\Program Files\Apache Software Foundation\Tomcat' + node['tomcat']['install-version'][0]
+    # default['tomcat']['run-as-service'] = true
+    # set['java']['set_etc_environment'] = true
     
 else
   default['tomcat']['user'] = "tomcat#{node['tomcat']['base_version']}"
