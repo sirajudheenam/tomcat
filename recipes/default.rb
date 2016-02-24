@@ -27,7 +27,6 @@ if node['tomcat']['base_version'].to_i == 7
   end
 end
 
-if node['platform_family'] != 'windows' # If node
   
 package node['tomcat']['packages']
 
@@ -52,9 +51,7 @@ unless node['tomcat']['deploy_manager_apps']
   file "#{node['tomcat']['config_dir']}/Catalina/localhost/host-manager.xml" do
     action :delete
   end
-end
-
-end # If node
+end 
 
 # Added a step to deploy the sample war
 remote_file "#{node['tomcat']['webapp_dir']}/sample.war" do
@@ -64,30 +61,6 @@ remote_file "#{node['tomcat']['webapp_dir']}/sample.war" do
         mode '0755'
         action :create_if_missing
 end
-# File: http://nexus.wdf.sap.corp:8081/nexus/content/repositories/deploy.releases/com/sap/ushell/ushell/1.36.0/ushell-1.36.0-opt.war
-# cookbook_file "#{node['tomcat']['webapp_dir']}/ushell-opt.war" do
-#         source 'ushell-1.36.0-opt.war'
-#         owner "#{node['tomcat']['user']}"
-#         group "#{node['tomcat']['group']}"
-#         mode '0755'
-#         action :create_if_missing
-# end
-# # File: http://nexus.wdf.sap.corp:8081/nexus/content/repositories/deploy.releases/com/sap/ui2/srvc/services/1.36.0/services-1.36.0.war
-# cookbook_file "#{node['tomcat']['webapp_dir']}/services.war" do
-#         source 'services-1.36.0.war'
-#         owner "#{node['tomcat']['user']}"
-#         group "#{node['tomcat']['group']}"
-#         mode '0755'
-#         action :create_if_missing
-# end
-# cookbook_file "#{node['tomcat']['webapp_dir']}/proxy.war" do
-#         source 'proxy-1.36.0.war'
-#         owner "#{node['tomcat']['user']}"
-#         group "#{node['tomcat']['group']}"
-#         mode '0755'
-#         action :create_if_missing
-# end
-
 node.set_unless['tomcat']['keystore_password'] = secure_password
 node.set_unless['tomcat']['truststore_password'] = secure_password
 
